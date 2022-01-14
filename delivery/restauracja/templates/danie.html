@@ -1,0 +1,11 @@
+    {% extends 'index.html' %}
+    {% block danie %}
+    {% if danie_user %}
+        <h1> {{ danie_user.nazwa }} </h1>
+        <p> Opis: {{danie_user.opis }}</p>
+        <p> cena: {{danie_user.cena }}</p>
+
+    {% else %}
+        <p>Nie ma danie o takim id.</p>
+    {% endif %}
+    {% endblock danie %}

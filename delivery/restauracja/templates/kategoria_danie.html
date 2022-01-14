@@ -1,0 +1,12 @@
+    {% extends 'index.html' %}
+    {% block danie %}
+    {% if kategoria_danie %}
+        {%for danie in kategoria_danie %}
+            <div style="width:100; height:100" >
+                <p><a href="/danie/{{ danie.id }}">{{ danie.nazwa}}</a> </p>
+                <p>  {{  danie.cena }} zł</p>
+                <p>  zł</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endblock danie %}

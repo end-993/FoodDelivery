@@ -1,0 +1,24 @@
+
+<div style="background-color:Orange;">
+    <h1> Logo  <a href="/onas"> O nas </a>  Koszyk  Zaloguj</h1>
+</div>
+
+<div style = "clear:both"></div>
+
+<div style = "width:200px; float:left">
+    <h3> Wybierz kategorię</h3>
+
+    {% for kat in kategorie %}
+        <p> <a href = "/kategoria/{{ kat.id }}">{{kat.nazwa}} </a></p>
+    {% endfor %}
+</div>
+
+<div style="width:700; float:left">
+    {% block danie %} {%endblock danie%}
+
+</div>
+
+
+
+
+<div style="clear:both"></div>
