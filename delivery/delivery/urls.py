@@ -21,10 +21,9 @@ from restauracja.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',index),
-    path('onas',onas),
-    path('kategoria/<id>',kategoria, name='kategoria'),
-    path('danie/<id>',danie, name='produkt'),
+    path('', Index.as_view(), name='index'),
+    path('onas/', Onas.as_view(), name='onas'),
+    path('zamowienie', Zamowienie.as_view(), name='zamowienie'),
     #static(settings.MEDIA_URL,document.settings.)
 ]
 

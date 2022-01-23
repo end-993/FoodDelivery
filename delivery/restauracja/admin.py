@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Dania,Kategoria
+from .models import Menu,Kategoria,Zamawianie
 # Register your models here.
 
-admin.site.register(Dania)
+admin.site.register(Menu)
 admin.site.register(Kategoria)
+admin.site.register(Zamawianie)

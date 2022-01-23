@@ -1,35 +1,73 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Kategoria,Dania
-# Create your views here.
-def index(request):
-   # wszystkie = produkty.objects.all()
-   # jeden = produkty.objects.get(pk=2)
-   # nazwa_kat = kategoria.objects.all()
-   # null = produkty.objects.filter(kategoria__isnull=False)
-    #zawiera = produkty.objects.filter(opis__icortains='dysk')
-    kategorie = Kategoria.objects.all()
-    dane = {'kategorie' : kategorie}
-    return render(request,'index.html',dane)
-def onas(request):
-    kategorie = Kategoria.objects.all()
-    dane = {'kategorie': kategorie}
-    return render(request,'onas.html',dane)
+from django.views import View
 
-def kategoria(request,id):
-    kategoria_user = Kategoria.objects.get(pk=id)
-    kategoria_danie = Dania.objects.filter(kategoria = kategoria_user)
-    kategorie = Kategoria.objects.all()
-    dane =   {'kategoria_user' : kategoria_user,
-              'kategoria_danie' : kategoria_danie,
-              'kategorie' : kategorie}
-    return render(request,'kategoria_danie.html',dane)
+from django.shortcuts import render
+from django.views import View
+from .models import *
 
-def danie(request,id):
-    danie_user = Dania.objects.get(pk=id)
-    kategorie = Kategoria.objects.all()
-    dane = {'danie_user' : danie_user, 'kategorie' : kategorie}
-    return render(request,'danie.html',dane)
 
+class Index(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'index.html')
+
+
+class Onas(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'onas.html')
+
+
+class Zamowienie(View):
+    def get(self, request, *args, **kwargs):
+        # get every item from each category
+        zupy = Menu.objects.filter(kategoria__nazwa__contains='Zupy')
+        dania_glowne = Menu.objects.filter(kategoria__nazwa__contains='Dania główne')
+        pizza = Menu.objects.filter(kategoria__nazwa__contains='Pizza')
+        napoje = Menu.objects.filter(kategoria__nazwa__contains='Napoje')
+
+
+        context = {
+            'zupy': zupy,
+            'dania_glowne': dania_glowne,
+            'pizza': pizza,
+            'napoje': napoje,
+        }
+
+        # render the template
+        return render(request, 'zamowienie.html', context)
+
+    def post(self, request, *args, **kwargs):
+        zamowione_przedmioty = {
+            'przedmioty': []
+        }
+
+        przedmioty = request.POST.getlist('przedmioty[]')
+
+        for przedmiot in przedmioty:
+            menu = Menu.objects.get(pk__contains=int(przedmiot))
+            przedmiot_data = {
+                'id': menu.pk,
+                'nazwa': menu.nazwa,
+                'cena': menu.cena
+            }
+
+            zamowione_przedmioty['przedmioty'].append(przedmiot_data)
+
+            cena = 0
+            przedmiot_ids = []
+
+        for przedmiot in zamowione_przedmioty['przedmioty']:
+            cena += przedmiot['cena']
+            przedmiot_ids.append(przedmiot['id'])
+
+        zamowienie = Zamawianie.objects.create(cena=cena)
+        zamowienie.przedmioty.add(*przedmiot_ids)
+
+        context = {
+            'przedmioty': zamowione_przedmioty['przedmioty'],
+            'cena': cena
+        }
+
+        return render(request, 'zamowienie_potwierdzenie.html', context)
 
 

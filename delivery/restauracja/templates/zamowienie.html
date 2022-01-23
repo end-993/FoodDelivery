@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mb-5">
+    <div >
+        <div class="col-md-12 col-sm-12 p-4">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="pt-5">
+                    {% for zupa in zupy %}
+                    <div class="row">
+                        <div class="col-md-2 col-sm-12">
+                            <img class="rounded" src="{{ zupa.obrazek.url }}" width="150" height="100"/>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <div class="d-flex flex-row">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" name="przedmioty[]" class="form-check-input" value="{{ zupa.pk }}">
+                                    <label class="form-check-label">{{ zupa.nazwa }}</label>
+                                </div>
+                                <p class="font-weight-bold pl-5">{{ zupa.cena }}</p>
+                            </div>
+                            <p>{{ zupa.opis }}</p>
+                        </div>
+                    </div>
+                    <hr />
+                {% endfor %}
+                </div>
+
+                <div class="pt-5">
+                    {% for dan in dania_glowne %}
+                    <div class="row mt-4">
+                        <div class="col-md-2 col-sm-12">
+                            <img class="rounded" src="{{ dan.obrazek.url }}" width="150" height="100"/>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <div class="d-flex flex-row">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" name="przedmioty[]" class="form-check-input" value="{{ dan.pk }}">
+                                    <label class="form-check-label">{{ dan.nazwa }}</label>
+                                </div>
+                                <p class="font-weight-bold pl-5">{{ dan.cena }}</p>
+                            </div>
+                            <p>{{ dan.opis }}</p>
+                        </div>
+                    </div>
+                    <hr />
+                    {% endfor %}
+                </div>
+
+                <div class="pt-5">
+                    {% for piz in pizza %}
+                    <div class="row mt-4">
+                        <div class="col-md-2 col-sm-12">
+                            <img class="rounded" src="{{ piz.obrazek.url }}" width="150" height="100"/>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <div class="d-flex flex-row">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" name="przedmioty[]" class="form-check-input" value="{{ piz.pk }}">
+                                    <label class="form-check-label">{{ piz.nazwa }}</label>
+                                </div>
+                                <p class="font-weight-bold pl-5">{{ piz.cena }}</p>
+                            </div>
+                            <p>{{ piz.opis }}</p>
+                        </div>
+                    </div>
+                    <hr />
+                    {% endfor %}
+                </div>
+
+                <div class="pt-5">
+                    {% for napoj in napoje %}
+                    <div class="row mt-4">
+                        <div class="col-md-2 col-sm-12">
+                            <img class="rounded" src="{{ napoj.obrazek.url }}" width="150" height="100"/>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <div class="d-flex flex-row">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" name="przedmioty[]" class="form-check-input" value="{{ napoj.pk }}">
+                                    <label class="form-check-label">{{ napoj.nazwa }}</label>
+                                </div>
+                                <p class="font-weight-bold pl-5">{{ napoj.cena }}</p>
+                            </div>
+                            <p>{{ napoj.opis }}</p>
+                        </div>
+                    </div>
+                    <hr />
+                    {% endfor %}
+                </div>
+
+                <button class="btn btn-dark mt-5">Place Order!</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
