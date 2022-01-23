@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
+from django.core.mail import send_mail
 
 from django.shortcuts import render
 from django.views import View
@@ -37,6 +38,11 @@ class Zamowienie(View):
         return render(request, 'zamowienie.html', context)
 
     def post(self, request, *args, **kwargs):
+        imie = request.POST.get('imie')
+        email = request.POST.get('email')
+        ulica = request.POST.get('ulica')
+        miasto = request.POST.get('miasto')
+        kod_pocztowy = request.POST.get('kod_pocztowy')
         zamowione_przedmioty = {
             'przedmioty': []
         }
@@ -60,8 +66,26 @@ class Zamowienie(View):
             cena += przedmiot['cena']
             przedmiot_ids.append(przedmiot['id'])
 
-        zamowienie = Zamawianie.objects.create(cena=cena)
+        zamowienie = Zamawianie.objects.create(
+            cena=cena,
+            imie=imie,
+            email=email,
+            ulica=ulica,
+            miasto=miasto,
+            kod_pocztowy=kod_pocztowy
+        )
         zamowienie.przedmioty.add(*przedmiot_ids)
+
+        #Po wszytskim wyślij maila
+        mail_gl = ('Dziękujemy za zamówienie! Twoje zamówienie jest w trakcie przygotowania i wkrótce zostanie dostarczone ')
+
+        send_mail(
+            'Dziękujemy za zamówienie!',
+            mail_gl,
+            'przyklad@przyklad.com',
+            [email],
+            fail_silently=False
+        )
 
         context = {
             'przedmioty': zamowione_przedmioty['przedmioty'],
