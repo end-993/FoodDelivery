@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
 from django.core.mail import send_mail
@@ -93,5 +93,4 @@ class Zamowienie(View):
         }
 
         return render(request, 'zamowienie_potwierdzenie.html', context)
-
 

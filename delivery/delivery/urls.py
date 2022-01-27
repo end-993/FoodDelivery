@@ -24,6 +24,5 @@ urlpatterns = [
     path('', Index.as_view(), name='index'),
     path('onas/', Onas.as_view(), name='onas'),
     path('zamowienie', Zamowienie.as_view(), name='zamowienie'),
-    #static(settings.MEDIA_URL,document.settings.)
-]
+]   +static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
 
