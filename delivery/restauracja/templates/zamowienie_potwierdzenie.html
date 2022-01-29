@@ -14,10 +14,10 @@
         <div class="col-md-5 col-sm-12 text-center">
             <h3 class="pb-3">Podsumowanie zamówienia:</h3>
             {% for przedmiot in przedmioty %}
-                <p>{{ przedmiot.nazwa }} <span class="pl-3">{{ przedmiot.cena }}</span></p>
+                <p>{{ przedmiot.nazwa }} <span class="pl-3">{{ przedmiot.cena }} zł</span></p>
             {% endfor %}
 
-            <p class="font-weight-bold pt-4">Razem: {{ cena }}</p>
+            <p class="font-weight-bold pt-4">Razem: {{ cena }} zł</p>
         </div>
     </div>
 

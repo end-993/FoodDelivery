@@ -10,6 +10,7 @@ class Menu(models.Model):
 
     def __str__(self):
         return self.nazwa
+
     class Meta:
         verbose_name = "Menu"
         verbose_name_plural = "Menu"
@@ -36,7 +37,7 @@ class Zamawianie(models.Model):
     email = models.CharField(max_length=50,blank=True)
     ulica = models.CharField(max_length=50, blank=True)
     miasto = models.CharField(max_length=50,blank=True)
-    kod_pocztowy = models.IntegerField(blank=True,null=True)
+    kod_pocztowy = models.CharField(max_length=6, blank=True)
     zaplacone = models.BooleanField(default=False)
     def __str__(self):
         return f'Zamowienie: {self.tworzenie.strftime("%b %d %I: %M %p")}'
@@ -44,4 +45,3 @@ class Zamawianie(models.Model):
     class Meta:
         verbose_name = "Zamowienie"
         verbose_name_plural = "Zamowienia"
-

@@ -1,11 +1,14 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.views import View
 from django.core.mail import send_mail
 
 from django.shortcuts import render
 from django.views import View
 from .models import *
+
+from django.shortcuts import render, redirect
+from django.views import View
+from django.utils.timezone import datetime
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.db.models import Q
 
 
 class Index(View):
@@ -77,7 +80,7 @@ class Zamowienie(View):
         zamowienie.przedmioty.add(*przedmiot_ids)
 
         #Po wszytskim wyślij maila
-        mail_gl = ('Dziękujemy za zamówienie! Twoje zamówienie jest w trakcie przygotowania i wkrótce zostanie dostarczone ')
+        mail_gl = ('Dziękujemy za zamówienie! Twoje zamówienie jest w trakcie przygotowania i wkrótce zostanie dostarczone.')
 
         send_mail(
             'Dziękujemy za zamówienie!',
@@ -94,3 +97,49 @@ class Zamowienie(View):
 
         return render(request, 'zamowienie_potwierdzenie.html', context)
 
+
+class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get(self, request, *args, **kwargs):
+        today = datetime.today()
+        orders = Zamawianie.objects.filter(tworzenie__year=today.year,
+                                           tworzenie__month=today.month, tworzenie__day=today.day)
+        total_revenue = 0
+
+        for order in orders:
+            total_revenue += order.cena
+
+        context = {
+            'orders': orders,
+            'total_revenue': total_revenue,
+            'total_orders': len(orders)
+        }
+        return render(request, 'dashboard.html', context)
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Personel').exists()
+
+
+class MenuDania(View):
+    def get(self, request, *args, **kwargs):
+        dania = Menu.objects.all()
+
+        context = {
+            'dania': dania,
+        }
+
+        return render(request, 'menu.html', context)
+
+class MenuSearch(View):
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get("q")
+
+        dania = Menu.objects.filter(
+            Q(name__icontains=query) |
+            Q(price__icontains=query) |
+            Q(description__icontains=query)
+        )
+
+        context = {
+            'dania': dania
+        }
+        return render(request, 'menu.html', context)
