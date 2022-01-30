@@ -134,9 +134,9 @@ class MenuSearch(View):
         query = self.request.GET.get("q")
 
         dania = Menu.objects.filter(
-            Q(name__icontains=query) |
-            Q(price__icontains=query) |
-            Q(description__icontains=query)
+            Q(nazwa__icontains=query) |
+            Q(cena__icontains=query) |
+            Q(opis__icontains=query)
         )
 
         context = {
